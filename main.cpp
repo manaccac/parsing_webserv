@@ -1,7 +1,4 @@
-#include <iostream>
-#include <string>
-
-#include <fstream> // pour le read
+#include "webserv.hpp"
 
 int main(int argc, char **argv)
 {
@@ -30,18 +27,26 @@ int main(int argc, char **argv)
 	std::string		line;
 
 	int nb_line = 0;
+	int on_serve = 0; //variable qui dit si on se trouve dans les acolade de serve
+	int on_location = 0;
 	while (std::getline(Read_file, line))
 	{
-		if (line.find("#")) // a un endroit dans la ligne il y a un commentaire
+		if (check_line(line, on_serve, on_location) == -1)//check ligne si valide ou non
 		{
+			std::cout << "line = " << nb_line + 1 << " ERROR ON THIS LINE:" << std::endl << line << std::endl;
+			//std::cout << on_serve << std::endl;
+			return (-1);
 		}
-		if ((line.find("server") >= 0 && line.find("server") != ULONG_MAX)
-			&& line.find("server") < line.find("#")) // check si le server et valide maintenant si il les partir dnas un autre parsing specliale serve
-		{
-			//il faut verifier si le server et bien valide avec { ... }
-			std::cout << line << std::endl;
-			//std::cout << nb_line << std::endl;
-		}
+		if (check_line(line, on_serve, on_location) == 3)
+			on_serve++;
+		else if (check_line(line, on_serve, on_location) == 4)
+			on_serve--;
+		if (check_line(line, on_serve, on_location) == 5)
+			on_location++;
+		if (check_line(line, on_serve, on_location) == 6)
+			on_location--;
 		nb_line++;
 	}
+	std::cout << on_serve << std::endl;
+	std::cout << on_location << std::endl;
 }
