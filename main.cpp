@@ -49,4 +49,26 @@ int main(int argc, char **argv)
 	}
 	std::cout << on_serve << std::endl;
 	std::cout << on_location << std::endl;
+	if (on_serve >= 1)
+	{
+		std::cout << "SERVER NOT OK" << std::endl;
+		return (-1);
+	}
+	if (on_location >= 1)
+	{
+		std::cout << "LOCATION NOT OK" << std::endl;
+		return (-1);
+	}
+	//on commence a ranger tous
+	std::ifstream pars_file(argv[1]);
+	while (std::getline(pars_file, line))
+	{
+		if ((line.find("server") >= 0 && line.find("server") != ULONG_MAX)
+			&& line.find("server") < line.find("#") && line.find("server_name") == ULONG_MAX) // check si le server et valide maintenant si il les partir dnas un autre parsing specliale serve
+		{
+			std::cout << line << std::endl;
+			// pars serve
+		}
+		
+	}
 }
