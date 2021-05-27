@@ -11,8 +11,8 @@ int	check_line(std::string line, int on_serve, int on_location)
 				return (1);
 			if (line[i] != '\t' || line[i] != ' ' || line[i] != '\n' || line[i] != '\v') // quelle sont les autre sorte de tab
 				i++;
-			if (line.find("server") == 0) // besoin d'une autre verif si il y a des truc entre server et {
-			{
+			if (line.find("server") == 0) // prochaine etape autoriser les tab et tous avent server
+			{	// besoin d'une autre verif si il y a des truc entre server et {
 				int pos = line.find("server") + 6;
 				while (line[pos])
 				{
@@ -23,6 +23,8 @@ int	check_line(std::string line, int on_serve, int on_location)
 						pos++;
 						while (line[pos]) // check si il y a { {
 						{
+							if (line[pos] == '#')
+								return (3);
 							if (line[pos] != '\t' && line[pos] != ' ' && line[pos] != '\n' && line[pos] != '\v')
 								return (-1);
 							pos++;
@@ -49,9 +51,21 @@ int	check_line(std::string line, int on_serve, int on_location)
 			return (4);
 
 		//location tchek
-
 		if (line.find("location") != ULONG_MAX)
+		{
+			if (line.find("{") == ULONG_MAX)
+				return (-1);
+			int pos = line.find("{") + 1;
+			while (line[pos])
+			{
+				if (line[pos] == '#')
+					return (5);
+				if (line[pos] != '\t' && line[pos] != ' ' && line[pos] != '\n' && line[pos] != '\v')
+					return (-1);
+				pos++;
+			}
 			return (5);
+		}
 		//
 		if (on_location >= 1 && line.find("}") != ULONG_MAX)
 			return (6);
