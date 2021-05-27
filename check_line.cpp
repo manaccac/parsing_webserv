@@ -52,7 +52,6 @@ int	check_line(std::string line, int on_serve, int on_location)
 
 		if (line.find("location") != ULONG_MAX)
 			return (5);
-
 		//
 		if (on_location >= 1 && line.find("}") != ULONG_MAX)
 			return (6);
