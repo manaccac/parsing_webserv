@@ -14,13 +14,17 @@ public:
 
 	//classe server
 	void set_name(std::string s_name);
-	std::string get_name();
+	std::string get_name(){return (_server_name);};
+
 	void set_listen(std::string s_listen);
-	std::string get_listen();
+	std::string get_listen(){return (_listen);};
+
 	void set_root(std::string s_root);
-	std::string get_root();
+	std::string get_root(){return (_root);};
+
 	void set_index(std::string s_index);
-	std::string get_index();
+	std::string get_index(){return (_index);};
+
 	void set_GET(std::string s_get);
 	bool get_GET(){return (_GET);};
 

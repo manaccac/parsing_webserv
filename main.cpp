@@ -61,11 +61,15 @@ int main(int argc, char **argv)
 	//on commence a ranger tous
 	std::ifstream pars_file(argv[1]);
 	conf file_conf;
+
+	bool ser_name = false;//pour savoir au'il y a bien 1 server_name par server
+
 	while (std::getline(pars_file, line))
 	{
 		if ((line.find("server") >= 0 && line.find("server") != ULONG_MAX)
 			&& line.find("server") < line.find("#") && line.find("server_name") == ULONG_MAX) // check si le server et valide maintenant si il les partir dnas un autre parsing specliale serve
 		{
+			ser_name = false;//pour savoir au'il y a bien 1 server_name par server
 			// pars serve
 			while (std::getline(pars_file, line) && line.find("}"))
 			{
@@ -73,6 +77,8 @@ int main(int argc, char **argv)
 					;
 				else
 				{
+					if (line.find("server_name ") != ULONG_MAX)
+						file_conf.set_name(line);
 					if (line.find("location") != ULONG_MAX)
 					{
 						while (std::getline(pars_file, line) && line.find("}"))
@@ -97,6 +103,7 @@ int main(int argc, char **argv)
 					if (line.find("TRACE") != ULONG_MAX)
 						file_conf.set_TRACE(line);
 				}
+				//a faire SI LA LIGNE N'est pas use ou mute c'est quelle et fausse
 			}
 		}
 	}
@@ -108,5 +115,7 @@ int main(int argc, char **argv)
 	std::cout << file_conf.get_CONNECT() << std::endl;
 	std::cout << file_conf.get_OPTIONS() << std::endl;
 	std::cout << file_conf.get_TRACE() << std::endl;
+
+	std::cout << file_conf.get_name() << std::endl;
 	// si pas de name ou de root ou autre return erreur
 }
