@@ -71,4 +71,5 @@ int main(int argc, char **argv)
 		}
 		
 	}
+	// si pas de name ou de root ou autre return erreur
 }
