@@ -1,4 +1,5 @@
 #include "webserv.hpp"
+#include "conf.hpp"
 
 int main(int argc, char **argv)
 {
@@ -47,8 +48,6 @@ int main(int argc, char **argv)
 			on_location--;
 		nb_line++;
 	}
-	std::cout << on_serve << std::endl;
-	std::cout << on_location << std::endl;
 	if (on_serve >= 1)
 	{
 		std::cout << "SERVER NOT OK" << std::endl;
@@ -61,15 +60,53 @@ int main(int argc, char **argv)
 	}
 	//on commence a ranger tous
 	std::ifstream pars_file(argv[1]);
+	conf file_conf;
 	while (std::getline(pars_file, line))
 	{
 		if ((line.find("server") >= 0 && line.find("server") != ULONG_MAX)
 			&& line.find("server") < line.find("#") && line.find("server_name") == ULONG_MAX) // check si le server et valide maintenant si il les partir dnas un autre parsing specliale serve
 		{
-			std::cout << line << std::endl;
 			// pars serve
+			while (std::getline(pars_file, line) && line.find("}"))
+			{
+				if (line.find("#") != ULONG_MAX)// il faut changer ca et regarder si il y a un truc avent le mute
+					;
+				else
+				{
+					if (line.find("location") != ULONG_MAX)
+					{
+						while (std::getline(pars_file, line) && line.find("}"))
+						{
+							;
+						}
+					}
+					if (line.find("GET") != ULONG_MAX)
+						file_conf.set_GET(line);
+					if (line.find("HEAD") != ULONG_MAX)
+						file_conf.set_HEAD(line);
+					if (line.find("POST") != ULONG_MAX)
+						file_conf.set_POST(line);
+					if (line.find("PUT") != ULONG_MAX)
+						file_conf.set_PUT(line);
+					if (line.find("DELETE") != ULONG_MAX)
+						file_conf.set_DELETE(line);
+					if (line.find("CONNECT") != ULONG_MAX)
+						file_conf.set_CONNECT(line);
+					if (line.find("OPTIONS") != ULONG_MAX)
+						file_conf.set_OPTIONS(line);
+					if (line.find("TRACE") != ULONG_MAX)
+						file_conf.set_TRACE(line);
+				}
+			}
 		}
-		
 	}
+	std::cout << file_conf.get_GET() << std::endl;
+	std::cout << file_conf.get_HEAD() << std::endl;
+	std::cout << file_conf.get_POST() << std::endl;
+	std::cout << file_conf.get_PUT() << std::endl;
+	std::cout << file_conf.get_DELETE() << std::endl;
+	std::cout << file_conf.get_CONNECT() << std::endl;
+	std::cout << file_conf.get_OPTIONS() << std::endl;
+	std::cout << file_conf.get_TRACE() << std::endl;
 	// si pas de name ou de root ou autre return erreur
 }
