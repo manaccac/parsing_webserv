@@ -1,6 +1,48 @@
 #include "webserv.hpp"
 #include "conf.hpp"
 
+int	ft_muted_line(std::string line)
+{
+	int i = 0;
+
+	while (line[i])
+	{
+		if (line[i] == '#' || line[i] == ';')
+			return (1);
+		if (line[i] == '\f' || line[i] == '\t' || line[i] == '\v' || line[i] == '\n' || line[i] == '\r' || line[i] == ' ')
+			i++;
+		else
+			return (-1);
+	}
+	return (0);
+}
+
+//fonction carractere avent a cree qui nous permet de voir directement si la ligne es valide
+
+int ft_methods_check(std::string line)
+{
+	int i;
+
+	i = line.find("allow_methods") + 13;
+	while (line[i])
+	{
+		if (line[i] == 'G' && line[i + 1] == 'E' && line[i + 2] == 'T') //test avec juste un G pour voir si sa segfault
+			i += 3;
+		else if (line[i] == 'P' && line[i + 1] == 'O' && line[i + 2] == 'S' && line[i + 3] == 'T')
+			i += 4;
+		else if (line[i] == 'D' && line[i + 1] == 'E' && line[i + 2] == 'L' && line[i + 3] == 'E' && line[i + 4] == 'T' && line[i + 5] == 'E')
+			i += 6;
+		else if (line[i] == '\f' || line[i] == '\t' || line[i] == '\v' || line[i] == '\n' || line[i] == '\r' || line[i] == ' ')
+			i++;
+		else if (line[i] == '#' || line[i] == ';')
+			return (0);
+		else
+			return (-1);
+	}
+	return (1);
+}
+
+
 int main(int argc, char **argv)
 {
 	if (argc != 2)
@@ -63,9 +105,10 @@ int main(int argc, char **argv)
 	conf file_conf;
 
 	bool ser_name = false;//pour savoir au'il y a bien 1 server_name par server
-
+	nb_line = 0;
 	while (std::getline(pars_file, line))
 	{
+		nb_line++;
 		if ((line.find("server") >= 0 && line.find("server") != ULONG_MAX)
 			&& line.find("server") < line.find("#") && line.find("server_name") == ULONG_MAX) // check si le server et valide maintenant si il les partir dnas un autre parsing specliale serve
 		{
@@ -73,7 +116,8 @@ int main(int argc, char **argv)
 			// pars serve
 			while (std::getline(pars_file, line) && line.find("}"))
 			{
-				if (line.find("#") != ULONG_MAX)// il faut changer ca et regarder si il y a un truc avent le mute
+				nb_line++;
+				if (ft_muted_line(line) == 1)// il faut changer ca et regarder si il y a un truc avent le mute
 					;
 				else
 				{
@@ -81,40 +125,33 @@ int main(int argc, char **argv)
 						file_conf.set_name(line);
 					if (line.find("location") != ULONG_MAX)
 					{
-						while (std::getline(pars_file, line) && line.find("}"))
+						while (std::getline(pars_file, line) && line.find("}") == ULONG_MAX)
 						{
 							;
 						}
 					}
-					if (line.find("GET") != ULONG_MAX)
-						file_conf.set_GET(line);
-					if (line.find("HEAD") != ULONG_MAX)
-						file_conf.set_HEAD(line);
-					if (line.find("POST") != ULONG_MAX)
-						file_conf.set_POST(line);
-					if (line.find("PUT") != ULONG_MAX)
-						file_conf.set_PUT(line);
-					if (line.find("DELETE") != ULONG_MAX)
-						file_conf.set_DELETE(line);
-					if (line.find("CONNECT") != ULONG_MAX)
-						file_conf.set_CONNECT(line);
-					if (line.find("OPTIONS") != ULONG_MAX)
-						file_conf.set_OPTIONS(line);
-					if (line.find("TRACE") != ULONG_MAX)
-						file_conf.set_TRACE(line);
+					else if (line.find("allow_methods") != ULONG_MAX)
+					{
+						if (line.find("GET") != ULONG_MAX)
+							file_conf.set_GET(line);
+						if (line.find("POST") != ULONG_MAX)
+							file_conf.set_POST(line);
+						if (line.find("DELETE") != ULONG_MAX)
+							file_conf.set_DELETE(line);
+						if (ft_methods_check(line) == -1)
+						{
+							std::cout << "line = " << nb_line << " ALLOW_METHODS ERROR" << std::endl;
+							return (-1);
+						}
+					}
 				}
 				//a faire SI LA LIGNE N'est pas use ou mute c'est quelle et fausse
 			}
 		}
 	}
 	std::cout << file_conf.get_GET() << std::endl;
-	std::cout << file_conf.get_HEAD() << std::endl;
 	std::cout << file_conf.get_POST() << std::endl;
-	std::cout << file_conf.get_PUT() << std::endl;
 	std::cout << file_conf.get_DELETE() << std::endl;
-	std::cout << file_conf.get_CONNECT() << std::endl;
-	std::cout << file_conf.get_OPTIONS() << std::endl;
-	std::cout << file_conf.get_TRACE() << std::endl;
 
 	std::cout << file_conf.get_name() << std::endl;
 	// si pas de name ou de root ou autre return erreur

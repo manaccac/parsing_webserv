@@ -42,11 +42,17 @@ int	check_line(std::string line, int on_serve, int on_location)
 	}
 	else
 	{
-		if (line[i] == '#') // il faut une autre fonction qui regarde si il y a des truc avent le mute
-			return (0);
+		while (line[i]) //verif si il y a du text avent le mute
+		{
+			if (line[i] == '#') // il faut une autre fonction qui regarde si il y a des truc avent le mute
+				return (0);
+			if (line[i] != '\f' && line[i] != '\t' && line[i] != '\v' && line[i] != '\n' && line[i] != '\r' && line[i] != ' ')
+				break;
+			i++;
+		}
 		if ((on_location == 0 && line.find("{") != ULONG_MAX && line.find("location") == ULONG_MAX)
 			|| line.find("location") > line.find("{")) // verif si il y a exemple {location
-			return (-1);
+				return (-1);
 		if (on_location == 0 && line.find("}") != ULONG_MAX)
 			return (4);
 
