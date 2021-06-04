@@ -42,9 +42,35 @@ void conf::set_name(std::string s_name)
 	_server_name = server;
 }
 
-void conf::set_listen(std::string s_name)
+int conf::set_listen(std::string s_name)
 {
-	(void)s_name;
+	int i;
+	i = s_name.find("listen") + 6;
+	char listen[100]; //malloc ?
+
+	while ((s_name[i] == '\f' || s_name[i] == '\t' || s_name[i] == '\v' || s_name[i] == '\n' || s_name[i] == '\r' || s_name[i] == ' ') && s_name[i] && s_name[i] != '#')
+		i++;
+	// si le 4 eme cara et un point on va dans un truc special ip
+	//si il y a un max de 4 chiffre et pas de point c un port
+	if (s_name[i + 3] == '.') //test segfault
+		std::cout << "slt\n";
+	else
+	{
+		int port_max = 0;
+		while (s_name[i] && port_max != 4)
+		{
+			if (s_name[i] >= '0' && s_name[i] <= '9')
+				listen[port_max] = s_name[i];
+			else
+				return (-1);
+			i++;
+			port_max++;
+		}
+		if (port_max == 4 && (isprint(s_name[i]) == 1 || isspace(s_name[i] == 1)))
+			return (-1);
+		_listen = listen;
+	}
+	return (0);
 }
 
 //IL FAUDRAIT UN TCHECK D'ERREUR EN MODE SI ON TE METT GETBLEU faut pas que ca marche

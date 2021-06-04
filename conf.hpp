@@ -13,10 +13,11 @@ public:
 	~conf();
 
 	//classe server
+	//mettre le resulta en int si -1 return erreur sinon good
 	void set_name(std::string s_name);
 	std::string get_name(){return (_server_name);};
 
-	void set_listen(std::string s_listen);
+	int set_listen(std::string s_listen);// good
 	std::string get_listen(){return (_listen);};
 
 	void set_root(std::string s_root);

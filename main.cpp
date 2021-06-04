@@ -144,6 +144,8 @@ int main(int argc, char **argv)
 							return (-1);
 						}
 					}
+					else if (line.find("listen") != ULONG_MAX) //mettre les port plus tard
+						file_conf.set_listen(line);
 				}
 				//a faire SI LA LIGNE N'est pas use ou mute c'est quelle et fausse
 			}
@@ -154,5 +156,6 @@ int main(int argc, char **argv)
 	std::cout << file_conf.get_DELETE() << std::endl;
 
 	std::cout << file_conf.get_name() << std::endl;
+	std::cout << file_conf.get_listen() << std::endl;
 	// si pas de name ou de root ou autre return erreur
 }
