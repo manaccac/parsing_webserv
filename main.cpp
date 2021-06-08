@@ -195,13 +195,13 @@ int main(int argc, char **argv)
 			}
 		}
 	}
-	std::cout << file_conf.get_GET() << std::endl;
-	std::cout << file_conf.get_POST() << std::endl;
-	std::cout << file_conf.get_DELETE() << std::endl;
+	std::cout << "GET: " << file_conf.get_GET() << std::endl;
+	std::cout << "POST: " << file_conf.get_POST() << std::endl;
+	std::cout << "DELETE: " << file_conf.get_DELETE() << std::endl;
 
-	std::cout << file_conf.get_name() << std::endl;
-	std::cout << file_conf.get_listen() << std::endl;
-	std::cout << file_conf.get_root() << std::endl;
-	std::cout << file_conf.get_index() << std::endl;
+	std::cout << "NAME: " << file_conf.get_name() << std::endl;
+	std::cout << "LISTEN: " << file_conf.get_listen() << std::endl;
+	std::cout << "ROOT: " << file_conf.get_root() << std::endl;
+	std::cout << "INDEX: " << file_conf.get_index() << std::endl;
 	// si pas de name ou de root ou autre return erreur
 }
