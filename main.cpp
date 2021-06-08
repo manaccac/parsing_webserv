@@ -122,7 +122,11 @@ int main(int argc, char **argv)
 				else
 				{
 					if (line.find("server_name ") != ULONG_MAX)
-						file_conf.set_name(line);
+						if (file_conf.set_name(line) == -1)
+							{
+								std::cout << "line = " << nb_line << " ERROR NAME" << std::endl;
+								return (-1);
+							}
 					if (line.find("location") != ULONG_MAX)
 					{
 						while (std::getline(pars_file, line) && line.find("}") == ULONG_MAX)

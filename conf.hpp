@@ -14,7 +14,7 @@ public:
 
 	//classe server
 	//mettre le resulta en int si -1 return erreur sinon good
-	void set_name(std::string s_name);
+	int set_name(std::string s_name);
 	std::string get_name(){return (_server_name);};
 
 	int set_listen(std::string s_listen);// good
