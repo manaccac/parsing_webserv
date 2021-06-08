@@ -133,11 +133,29 @@ int main(int argc, char **argv)
 					else if (line.find("allow_methods") != ULONG_MAX)
 					{
 						if (line.find("GET") != ULONG_MAX)
-							file_conf.set_GET(line);
+						{
+							if (file_conf.set_GET(line) == -1)
+							{
+								std::cout << "line = " << nb_line << " ERROR GET" << std::endl;
+								return (-1);
+							}
+						}
 						if (line.find("POST") != ULONG_MAX)
-							file_conf.set_POST(line);
+						{
+							if (file_conf.set_POST(line) == -1)
+							{
+								std::cout << "line = " << nb_line << " ERROR POST" << std::endl;
+								return (-1);
+							}
+						}
 						if (line.find("DELETE") != ULONG_MAX)
-							file_conf.set_DELETE(line);
+						{
+							if (file_conf.set_DELETE(line) == -1)
+							{
+								std::cout << "line = " << nb_line << " ERROR DELETE" << std::endl;
+								return (-1);
+							}
+						}
 						if (ft_methods_check(line) == -1)
 						{
 							std::cout << "line = " << nb_line << " ALLOW_METHODS ERROR" << std::endl;
@@ -145,16 +163,26 @@ int main(int argc, char **argv)
 						}
 					}
 					else if (line.find("listen") != ULONG_MAX) //mettre les port plus tard
+					{
 						if (file_conf.set_listen(line) == -1)
 						{
 							std::cout << "line = " << nb_line << " ERROR listen/port" << std::endl;
 							return (-1);
 						}
+					}
 					else if (line.find("root") != ULONG_MAX)
 					{
 						if (file_conf.set_root(line) == -1)
 						{
 							std::cout << "line = " << nb_line << " ERROR root" << std::endl;
+							return (-1);
+						}
+					}
+					else if (line.find("index") != ULONG_MAX)
+					{
+						if (file_conf.set_index(line) == -1)
+						{
+							std::cout << "line = " << nb_line << " ERROR index" << std::endl;
 							return (-1);
 						}
 					}
@@ -169,5 +197,7 @@ int main(int argc, char **argv)
 
 	std::cout << file_conf.get_name() << std::endl;
 	std::cout << file_conf.get_listen() << std::endl;
+	std::cout << file_conf.get_root() << std::endl;
+	std::cout << file_conf.get_index() << std::endl;
 	// si pas de name ou de root ou autre return erreur
 }

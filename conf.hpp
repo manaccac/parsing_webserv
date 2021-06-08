@@ -20,25 +20,25 @@ public:
 	int set_listen(std::string s_listen);// good
 	std::string get_listen(){return (_listen);};
 
-	void set_root(std::string s_root);
+	int set_root(std::string s_root);
 	std::string get_root(){return (_root);};
 
-	void set_index(std::string s_index);
+	int set_index(std::string s_index);
 	std::string get_index(){return (_index);};
 
-	void set_GET(std::string s_get);
+	int set_GET(std::string s_get);
 	bool get_GET(){return (_GET);};
 
-	void set_POST(std::string s_post);
+	int set_POST(std::string s_post);
 	bool get_POST(){return (_POST);};
 
-	void set_DELETE(std::string s_delete);
+	int set_DELETE(std::string s_delete);
 	bool get_DELETE(){return (_DELETE);};
 
 
 private:
-	unsigned int nb_server;
-	unsigned int nb_location;
+//	unsigned int nb_server;
+//	unsigned int nb_location;
 
 
 	// surment tous ca dans une classe serveur
