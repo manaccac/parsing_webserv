@@ -126,12 +126,19 @@ int conf::set_listen(std::string s_name) // voir si le res et pas plus grand que
 			if (s_name[i] >= '0' && s_name[i] <= '9')
 				listen[port_max] = s_name[i];
 			else
-				return (-1);
+				break;
 			i++;
 			port_max++;
 		}
-		if (port_max == 4 && (isprint(s_name[i]) == 1 || isspace(s_name[i] == 1)))
-			return (-1);
+		while (s_name[i])
+		{
+			if ((s_name[i] == '\f' || s_name[i] == '\t' || s_name[i] == '\v' || s_name[i] == '\n' || s_name[i] == '\r' || s_name[i] == ' ') && s_name[i])
+				i++;
+			else if (s_name[i] == '#' ||  s_name[i] == ';')
+				break;
+			else
+				return (-1);
+		}
 		_listen = listen;
 	}
 	return (0);
