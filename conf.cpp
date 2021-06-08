@@ -46,14 +46,59 @@ int conf::set_listen(std::string s_name)
 {
 	int i;
 	i = s_name.find("listen") + 6;
-	char listen[100]; //malloc ?
+	char listen[17]; //malloc ?
 
 	while ((s_name[i] == '\f' || s_name[i] == '\t' || s_name[i] == '\v' || s_name[i] == '\n' || s_name[i] == '\r' || s_name[i] == ' ') && s_name[i] && s_name[i] != '#')
 		i++;
 	// si le 4 eme cara et un point on va dans un truc special ip
 	//si il y a un max de 4 chiffre et pas de point c un port
-	if (s_name[i + 3] == '.') //test segfault
-		std::cout << "slt\n";
+	if (s_name[i + 3] == '.' || s_name[i + 2] == '.' || s_name[i + 1] == '.') //test segfault
+	{
+		int ip = 0;
+		for (int x = 0; x != 4; x++)
+		{
+			for (int j = 0; j != 3; j++)
+			{
+				if (s_name[i] == '.' || s_name[i] == ':')
+					break;
+				if (s_name[i] >= '0' && s_name[i] <= '9')
+					listen[ip] = s_name[i];
+				i++;
+				ip++;
+			}
+			listen[ip] = s_name[i];
+			ip++;
+			i++;
+		}
+
+		if (s_name[i - 1] == ':')
+		{
+			for (int w = 0; w != 4; w++)
+			{
+				if (s_name[i])
+				{
+					if (s_name[i] >= '0' && s_name[i] <= '9')
+						listen[ip] = s_name[i];
+					else
+						return (-1);
+				}
+				else
+					break;
+				i++;
+				ip++;
+			}
+		}
+		while (s_name[i])
+		{
+			if ((s_name[i] == '\f' || s_name[i] == '\t' || s_name[i] == '\v' || s_name[i] == '\n' || s_name[i] == '\r' || s_name[i] == ' ') && s_name[i])
+				i++;
+			if (s_name[i] == '#' ||  s_name[i] == ';')
+				break;
+			else
+				return (-1);
+		}
+		_listen = listen;
+	}
 	else
 	{
 		int port_max = 0;
@@ -71,6 +116,11 @@ int conf::set_listen(std::string s_name)
 		_listen = listen;
 	}
 	return (0);
+}
+
+int		conf::set_root(std::string s_name)
+{
+	
 }
 
 //IL FAUDRAIT UN TCHECK D'ERREUR EN MODE SI ON TE METT GETBLEU faut pas que ca marche

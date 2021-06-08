@@ -145,7 +145,19 @@ int main(int argc, char **argv)
 						}
 					}
 					else if (line.find("listen") != ULONG_MAX) //mettre les port plus tard
-						file_conf.set_listen(line);
+						if (file_conf.set_listen(line) == -1)
+						{
+							std::cout << "line = " << nb_line << " ERROR listen/port" << std::endl;
+							return (-1);
+						}
+					else if (line.find("root") != ULONG_MAX)
+					{
+						if (file_conf.set_root(line) == -1)
+						{
+							std::cout << "line = " << nb_line << " ERROR root" << std::endl;
+							return (-1);
+						}
+					}
 				}
 				//a faire SI LA LIGNE N'est pas use ou mute c'est quelle et fausse
 			}
