@@ -7,21 +7,6 @@ conf::conf()
 	_DELETE = false;
 }
 
-conf::conf(conf const & s_conf)
-{
-	_GET = s_conf._GET;
-	_POST = s_conf._POST;
-	_DELETE = s_conf._DELETE;
-}
-
-conf    &conf::operator=(conf const & s_conf)
-{
-	_GET = s_conf._GET;
-	_POST = s_conf._POST;
-	_DELETE = s_conf._DELETE;
-	return (*this);
-}
-
 conf::~conf()
 {
 }
@@ -37,23 +22,20 @@ int conf::set_name(std::string s_name)
 		return (-1);
 	i = s_name.find("server_name") + 11;
 	int j = 0;
-	char server[100]; // malloc ?
 
-	while ((s_name[i] == '\f' || s_name[i] == '\t' || s_name[i] == '\v' || s_name[i] == '\n' || s_name[i] == '\r' || s_name[i] == ' ') && s_name[i] && s_name[i] != '#')
-		i++;
-	while (s_name[i] != '\f' && s_name[i] != '\t' && s_name[i] != '\v' && s_name[i] != '\n' && s_name[i] != '\r' && s_name[i] != '#' && s_name[i] != ';' && s_name[i] != ' ' && s_name[i])
-		server[j++] = s_name[i++];
-
-	while (s_name[i])
+	char *server; // malloc ?
+	while (s_name[i] != '#' && s_name[i] != ';' && s_name[i])
 	{
-		if ((s_name[i] == '\f' || s_name[i] == '\t' || s_name[i] == '\v' || s_name[i] == '\n' || s_name[i] == '\r' || s_name[i] == ' ') && s_name[i])
+		server = (char *)malloc(sizeof(char *) * 100);
+		j = 0;
+		while ((s_name[i] == '\f' || s_name[i] == '\t' || s_name[i] == '\v' || s_name[i] == '\n' || s_name[i] == '\r' || s_name[i] == ' ') && s_name[i] && s_name[i] != '#')
 			i++;
-		else if (s_name[i] == '#' ||  s_name[i] == ';')
-			break;
-		else
-			return (-1);
+		while (s_name[i] != '\f' && s_name[i] != '\t' && s_name[i] != '\v' && s_name[i] != '\n' && s_name[i] != '\r' && s_name[i] != '#' && s_name[i] != ';' && s_name[i] != ' ' && s_name[i])
+			server[j++] = s_name[i++];
+		_MAP_server["server_name"].push_back(server);
+		free(server);
 	}
-	_server_name = server;
+
 	return (0);
 }
 

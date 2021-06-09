@@ -3,13 +3,13 @@
 
 #include <iostream>
 #include "webserv.hpp"
+#include <map>
+#include <vector>
 
 class conf
 {
 public:
 	conf();
-	conf(conf const & s_conf);
-	conf &operator=(conf const & s_conf);
 	~conf();
 
 	//classe server
@@ -35,24 +35,27 @@ public:
 	int set_DELETE(std::string s_delete);
 	bool get_DELETE(){return (_DELETE);};
 
-
+	std::map<std::string, std::vector<std::string> > _MAP_server;
+	// CE QU'IL FAUT DANS
+	//LA MAP C SERVER NAME(MULTIPLE) LISTEN(MULTIPLE) ROOT(UNIQUE)
+	//INDEX (MULTIPLE) ET ALLOW_METHODS(MULTIPLE)
 private:
 //	unsigned int nb_server;
 //	unsigned int nb_location;
 
-
-	// surment tous ca dans une classe serveur
 	std::string _server_name;
 	std::string _listen;
 	std::string _root;
 	std::string _index;
-	//method GET HEAD POST PUT DELETE CONNECT OPTIONS TRACE
+//
 	bool _GET;
 	bool _POST;
 	bool _DELETE;
 
 	//location surment une classe location
 
+	conf(conf const & s_conf);
+	conf &operator=(conf const & s_conf);
 
 };
 

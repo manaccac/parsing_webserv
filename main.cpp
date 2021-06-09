@@ -199,9 +199,20 @@ int main(int argc, char **argv)
 	std::cout << "POST: " << file_conf.get_POST() << std::endl;
 	std::cout << "DELETE: " << file_conf.get_DELETE() << std::endl;
 
-	std::cout << "NAME: " << file_conf.get_name() << std::endl;
+//	std::cout << "NAME: " << file_conf.get_name() << std::endl;
 	std::cout << "LISTEN: " << file_conf.get_listen() << std::endl;
 	std::cout << "ROOT: " << file_conf.get_root() << std::endl;
 	std::cout << "INDEX: " << file_conf.get_index() << std::endl;
 	// si pas de name ou de root ou autre return erreur
+
+	std::map<std::string, std::vector<std::string> >::iterator it;
+	
+	for (it = file_conf._MAP_server.begin(); it != file_conf._MAP_server.end(); it++)
+	{
+		std::cout << it->first << ": ";
+		std::vector<std::string> inVect = (*it).second;
+		for (unsigned j=0; j<inVect.size(); j++)
+           std::cout << inVect[j] << " ";
+		std::cout << std::endl;
+	}
 }
