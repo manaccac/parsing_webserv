@@ -51,11 +51,19 @@ int conf::set_listen(std::string s_name) // voir si le res et pas plus grand que
 
 	while (s_name[i] != '#' && s_name[i] != ';' && s_name[i])
 	{
-		listen = (char *)malloc(sizeof(char *) * 100);
+		listen = (char *)malloc(sizeof(char *) * s_name.length()); //malloc mieux
 		while ((s_name[i] == '\f' || s_name[i] == '\t' || s_name[i] == '\v' || s_name[i] == '\n' || s_name[i] == '\r' || s_name[i] == ' ') && s_name[i] && s_name[i] != '#')
 			i++;
+		if (s_name[i] == '#' || s_name[i] == ';')
+		{
+			free(listen);
+			break ;
+		}
 		if (isnumber(s_name[i]) == 0)
+		{
+			free(listen);
 			return (-1);
+		}
 		if (s_name[i + 3] == '.' || s_name[i + 2] == '.' || s_name[i + 1] == '.') //test segfault
 		{
 			int ip = 0;
@@ -81,14 +89,17 @@ int conf::set_listen(std::string s_name) // voir si le res et pas plus grand que
 					if (s_name[i])
 					{
 						if (s_name[i] >= '0' && s_name[i] <= '9')
+						{
 							listen[ip] = s_name[i];
+						}
 						else
+						{
+							free(listen);
 							return (-1);
+						}
 					}
 					else
 						break;
-					std::cout << s_name << std::endl;
-					std::cout << listen << std::endl;
 					i++;
 					ip++;
 				}
@@ -124,8 +135,9 @@ int		conf::set_root(std::string s_name)
 		return (-1);
 
 	i = s_name.find("root") + 4;
-	char root[100]; //malloc ?
+	char *root; //malloc ?
 
+	root = (char *)malloc(sizeof(char *) * s_name.length());
 	while ((s_name[i] == '\f' || s_name[i] == '\t' || s_name[i] == '\v' || s_name[i] == '\n' || s_name[i] == '\r' || s_name[i] == ' ') && s_name[i] && s_name[i] != '#')
 		i++;
 	int iroot = 0;
@@ -142,9 +154,13 @@ int		conf::set_root(std::string s_name)
 		else if (s_name[i] == '#' ||  s_name[i] == ';')
 			break;
 		else
+		{
+			free(root);
 			return (-1);
+		}
 	}
-	_root = root;
+	_MAP_server["root"].push_back(root);
+	free(root);
 	return (0);
 }
 
