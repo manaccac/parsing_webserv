@@ -172,27 +172,23 @@ int		conf::set_index(std::string s_name) // il faut accepter les ;ultiple index
 	if (isspace(s_name[i]) == 0 && i != (int)s_name.find("index"))
 		return (-1);
 	i = s_name.find("index") + 5;
-	char index[100]; //malloc ?
+	char *index; //malloc ?
 
-	while ((s_name[i] == '\f' || s_name[i] == '\t' || s_name[i] == '\v' || s_name[i] == '\n' || s_name[i] == '\r' || s_name[i] == ' ') && s_name[i] && s_name[i] != '#')
-		i++;
-	int iindex = 0;
-	while (isprint(s_name[i]) && isspace(s_name[i]) == 0 && s_name[i] != '#' && s_name[i] != ';' && s_name[i])
+	while (s_name[i] != '#' && s_name[i] != ';' && s_name[i])
 	{
-		index[iindex] = s_name[i];
-		iindex++;
-		i++;
-	}
-	while (s_name[i])
-	{
-		if ((s_name[i] == '\f' || s_name[i] == '\t' || s_name[i] == '\v' || s_name[i] == '\n' || s_name[i] == '\r' || s_name[i] == ' ') && s_name[i])
+		index = (char *)malloc(sizeof(char *) * s_name.length());
+		while ((s_name[i] == '\f' || s_name[i] == '\t' || s_name[i] == '\v' || s_name[i] == '\n' || s_name[i] == '\r' || s_name[i] == ' ') && s_name[i] && s_name[i] != '#')
 			i++;
-		else if (s_name[i] == '#' ||  s_name[i] == ';')
-			break;
-		else
-			return (-1);
+		int iindex = 0;
+		while (isprint(s_name[i]) && isspace(s_name[i]) == 0 && s_name[i] != '#' && s_name[i] != ';' && s_name[i])
+		{
+			index[iindex] = s_name[i];
+			iindex++;
+			i++;
+		}
+		_MAP_server["index"].push_back(index);
+		free(index);
 	}
-	_index = index;
 	return (0);
 }
 
@@ -214,8 +210,11 @@ int conf::set_GET(std::string s_get)
 		else
 			return (-1);
 	}
-	if (s_get.find(" GET") != ULONG_MAX)
+	if (s_get.find(" GET") != ULONG_MAX && _GET != true)
+	{
 		_GET = true;
+		_MAP_server["allow methods"].push_back("GET");
+	}
 	else
 		std::cout << "ERREUR GET\n";
 	return (0);
@@ -238,8 +237,11 @@ int conf::set_POST(std::string s_get)
 		else
 			return (-1);
 	}
-	if (s_get.find(" POST") != ULONG_MAX)
+	if (s_get.find(" POST") != ULONG_MAX && _POST != true)
+	{
 		_POST = true;
+		_MAP_server["allow methods"].push_back("POST");
+	}
 	else
 		std::cout << "ERREUR POST\n";
 	return (0);
@@ -262,8 +264,11 @@ int conf::set_DELETE(std::string s_get)
 		else
 			return (-1);
 	}
-	if (s_get.find(" DELETE") != ULONG_MAX)
+	if (s_get.find(" DELETE") != ULONG_MAX && _DELETE != true)
+	{
 		_DELETE = true;
+		_MAP_server["allow methods"].push_back("DELETE");
+	}
 	else
 		std::cout << "ERREUR DELETE\n";
 	return (0);

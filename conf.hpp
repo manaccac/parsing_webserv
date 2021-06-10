@@ -36,9 +36,7 @@ public:
 	bool get_DELETE(){return (_DELETE);};
 
 	std::map<std::string, std::vector<std::string> > _MAP_server;
-	// CE QU'IL FAUT DANS
-	//LA MAP C SERVER NAME(MULTIPLE) LISTEN(MULTIPLE) ROOT(UNIQUE)
-	//INDEX (MULTIPLE) ET ALLOW_METHODS(MULTIPLE)
+
 private:
 //	unsigned int nb_server;
 //	unsigned int nb_location;
