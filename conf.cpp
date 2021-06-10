@@ -51,7 +51,7 @@ int conf::set_listen(std::string s_name) // voir si le res et pas plus grand que
 
 	while (s_name[i] != '#' && s_name[i] != ';' && s_name[i])
 	{
-		listen = (char *)malloc(sizeof(char *) * s_name.length()); //malloc mieux
+		listen = (char *)malloc(sizeof(char *) * s_name.length() + 16); //malloc mieux
 		while ((s_name[i] == '\f' || s_name[i] == '\t' || s_name[i] == '\v' || s_name[i] == '\n' || s_name[i] == '\r' || s_name[i] == ' ') && s_name[i] && s_name[i] != '#')
 			i++;
 		if (s_name[i] == '#' || s_name[i] == ';')
